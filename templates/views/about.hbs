@@ -1,0 +1,76 @@
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = { theme: { extend: { colors: { clifford: '#da373d', } }
+      } }
+    </script>
+  </head>
+  <body>
+    <!-- component -->
+    <style>@import
+      url(https://cdnjs.cloudflare.com/ajax/libs/MaterialDesign-Webfont/5.3.45/css/materialdesignicons.min.css);</style>
+    <div
+      class="min-w-screen min-h-screen bg-black flex items-center p-5 lg:p-10 overflow-hidden relative"
+    >
+      <div
+        class="w-full max-w-6xl rounded bg-slate-200 shadow-xl p-10 lg:p-20 mx-auto text-gray-800 relative md:text-left"
+      >
+        <div class="md:flex items-center -mx-10">
+          <div class="w-full md:w-1/2 px-10 mb-10 md:mb-0">
+            <div class="relative">
+              <img
+                src="./images/lnmiit_about.jpeg"
+                class="w-full relative z-10"
+                alt=""
+              />
+              <div
+                class="border-4 border-yellow-200 absolute top-10 bottom-10 left-10 right-10 z-0"
+              ></div>
+            </div>
+          </div>
+          <div class="w-full md:w-1/2 px-10">
+            <div class="mb-10">
+              <h1 class="font-bold uppercase text-2xl text-center mb-5">ABOUT US</h1>
+              <p class="text-sm">The L-CTBIEL (Centre for Technology Business
+                Incubation and Entrepreneurial Leadership) is a
+                multi-disciplinary innovation, incubation and entrepreneurial
+                hub with a vision to develop and facilitate the ecosystem
+                necessary for innovation, incubation and entrepreneurial
+                leadership at LNMIIT. Despite being a relatively younger
+                institution in Rajasthan, the LNMIIT Jaipur has developed a
+                strong footprint in entrepreneurship and yielded several
+                companies serving the nation in terms of job creation and
+                revenue generation.
+                <hr/>
+                <br>
+                Operating Model: LCTBIEL:A multi-disciplinary innovation, incubation and entrepreneurial hub.
+               <hr/>
+               <br>
+                Through this centre, a strong team comprising students, interested/involved faculty, research scholars, and students is being developed for interactive, jointly steered and highly coordinated efforts to produce several successful start-ups.
+                <a
+                  href="https://www.lnmiit.ac.in/"
+                  target=”blank"
+                  class="opacity-50 text-gray-900 hover:opacity-100 inline-block text-xs leading-none border-b border-gray-900"
+                >MORE <i class="mdi mdi-arrow-right"></i></a></p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+    {{!-- lnmiit  logo --}}
+    <div class="flex items-end justify-end fixed bottom-0 right-0 mb-4 mr-4 z-10">
+      <div>
+        <a href="/" class="block w-16 h-16 rounded-full transition-all shadow hover:shadow-lg transform hover:scale-110 hover:rotate-12">
+          <img class="object-cover object-center w-full h-full rounded-full" src="./images/lnmiit.logo.png"/>
+        </a>
+      </div>
+    </div>
+
+  </body>
+</html>
