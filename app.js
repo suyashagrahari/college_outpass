@@ -5,14 +5,14 @@ const app = express();
 require("./db/conn");
 const port = process.env.PORT || 4000;
 
-
-const ContactModel = require("./models/contactusSchema");
+const nodemailer = require('nodemailer');
+const ContactModel =  require("./models/contactusSchema");
 const Register = require("./models/registration");
 
 const hbs = require("hbs");
 const path = require("path");
 const multer = require('multer');
-
+const OutpassModel = require("./models/outpassSchema");
 app.use(express.json());
 app.use(express.json());
 app.use(express.urlencoded({extended:false}));
@@ -181,6 +181,8 @@ const upload = multer({
 
 
 
+
+
 // // ************************************************** SEND DATA IN MONGOOSE ATLAS DATABASE UING POST METHOD ***************************************************
 
 
@@ -197,6 +199,7 @@ app.post("/registerstudent",upload, async(req,res)=>{
     console.log(req.file.filename);
     console.log(req.body);
     
+    
     try {
         if(password === confirmpassword)
         {
@@ -208,7 +211,7 @@ app.post("/registerstudent",upload, async(req,res)=>{
                 password : req.body.password,
                 confirmpassword : req.body.confirmpassword,
                 imagename : req.file.filename,
-                status : "student",
+                users : "student",
             })
 
             const User  = await newUser.save();
@@ -249,7 +252,7 @@ app.post("/registerfaculty",upload, async(req,res)=>{
                 password : req.body.password,
                 confirmpassword : req.body.confirmpassword,
                 imagename : req.file.filename,
-                status : "faculty",
+                users : "faculty",
             })
 
             const User  = await newUser.save();
@@ -269,15 +272,45 @@ app.post("/registerfaculty",upload, async(req,res)=>{
 
 
 // ************************************ LOGIN FORM ***********************************
-app.post("/loginform",async(req,res)=>{
+app.post("/loginform",upload,async(req,res)=>{
     console.log(req.body);
-    res.send("chla gya");
+    const Email  = req.body.email;
+    const Password = req.body.password;
+   
+    console.log(Email);
+    console.log(Password);
+    try {
+        const user = await Register.findOne({email:Email});
+       console.log(user.status);
+        if(user.email == Email && user.password == Password )
+        {
+            if(user.users === "student")
+            {
+                console.log("ye sturdent h")
+                res.render("outpass",{user});
+            }
+            else
+            {
+                const newUser = await OutpassModel.find();
+                res.render("list",{newUser,user});
+            }
+        }
+        else{
+            res.send("<h1> login credential is not matching please try again </h1>");
+        }
+        
+    } catch (error) {
+        console.log(error);
+        res.render("registrationerror")
+    }
+   
 })
 
 // ************************************ CONTACT US FORM  ***********************************
 
-app.post("/sendmessage", async(req,res)=>{
+app.post("/sendmessage",upload, async(req,res)=>{
     console.log(req.body);
+    console.log("data arha h backend m !")
        try {
             const newUser = new ContactModel(
                 {
@@ -298,28 +331,75 @@ app.post("/sendmessage", async(req,res)=>{
 
 // ************************************ OUTPASS FORM  ***********************************
 
-app.post("/outpass", async(req,res)=>{
-        
+app.post("/outpass",upload, async(req,res)=>{
+            const data = req.body;
+            console.log(data);
         try {
-            const student  = await Contactform.findOne({email : req.body.email})
-            const newUser = new Outpassprocess({
-                name:req.body.name,
-                mode:req.body.visit,
-                data:req.body.date,
-                time:req.body.time,
-                visitpurpose:req.body.visitpurpose,      
-
-            })
-            const saveUser = await newUser.save();
-            console.log(saveUser);
-            res.render("outpass");
+            const Email = data.email;
+            const user = await Register.findOne({email : Email});
+            console.log(user);
+            const newUser = new OutpassModel(
+                {  
+                    email: user.email,
+                    name : user.name,
+                    rollno : user.rollno,
+                    phone: user.phone,
+                    mode : data.mode,
+                    imagename : user.imagename,
+                    visitpurpose : data.visitpurpose,
+                    returntime :data.time,
+                    returndate : data.date,
+                }
+                )
+            await newUser.save();
+            res.render("home");
         } catch (error) {
             console.log(error);
-            res.render("registrationerror");
+            res.render("registrationerror")
             
         }
-    
 })
+
+app.post("/approval",upload,async(req,res)=>{
+    try {
+        console.log(req.body);
+        res.redirect("list");
+    } catch (error) {
+        console.log(error);
+    }
+})
+
+
+// Now send Approval message through mail
+// Create a transporter using your SMTP settings
+
+
+const transporter = nodemailer.createTransport({
+    service: 'Gmail',
+    auth: {
+      user: 'backendtest1234@gmail.com',
+      pass: 'rodshmjrrkmvlzgq',
+    },
+  });
+
+//   Create an email message with the recipient's email address, subject, and content:
+
+// const mailOptions = {
+//     from: 'backendtest1234@gmail.com',
+//     to: '20ume003@lnmiit.ac.in',
+//     subject: 'Hacker.☠️',
+//     text: 'Your laptop is hacked mrs aditya soni !!!',
+//   };
+
+//   Use the transporter to send the email:
+
+// transporter.sendMail(mailOptions, (error, info) => {
+//     if (error) {
+//       console.error('Error sending email:', error);
+//     } else {
+//       console.log('Email sent:', info.response);
+//     }
+//   });
 
 
 // // ************************************ EXPRESS RUNNING CODE ***********************************

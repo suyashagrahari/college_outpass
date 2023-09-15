@@ -4,21 +4,10 @@ const mongoose = require("mongoose")
 
 
 // ****************************** STUDENT SCHEMA ****************************
-const registrationSchema = new mongoose.Schema({
-
-    name:{
-        type:String,
-        required : true,
-        lowercase:true
-    },
-    rollno:{
-        type: String,
-        lowercase:true,
-    },
+const outpassSchema = new mongoose.Schema({
     email:{
         type: String,
         required: true,
-        unique : true,
         lowercase: true,
         validate (value){
             if(!validator.isEmail(value)){
@@ -29,18 +18,16 @@ const registrationSchema = new mongoose.Schema({
             }
         }
     },
-    password : {
-        type: String,
-        minlength:8,
-        required:true,
-        maxlength:16,
+    name:{
+        type:String,
+        required : true,
+        lowercase:true
     },
-    confirmpassword : {
+    rollno:{
         type: String,
-        required:true,
-        minlength:8,
-        maxlength:16,
+        lowercase:true,
     },
+    
     phone:{
         type: String,
         // unique:true,  
@@ -57,10 +44,6 @@ const registrationSchema = new mongoose.Schema({
         message: 'Phone number must contain only numeric characters.',
         },
     },
-    users : {
-        type : String,
-        required : true,
-    },
     imagename : {
         type : String,
     },
@@ -76,11 +59,14 @@ const registrationSchema = new mongoose.Schema({
     returndate:{
         type:Date,
         },
+    status : {
+        type:String,
+    },
 
 });
 
 
 
-const Register = mongoose.model("Register",registrationSchema);
+const OutpassModel = mongoose.model("OutpassModel",outpassSchema);
 
-module.exports = Register;
+module.exports = OutpassModel;
